@@ -1,0 +1,31 @@
+.mail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.headerRow span {
+  color: var(--text-faint);
+  margin-right: 0.4rem;
+}
+
+.subject {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.body {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}

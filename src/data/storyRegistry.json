@@ -1,0 +1,12 @@
+{
+  "stories": [
+    {
+      "id": "story_01_der_einbruch",
+      "title": "Der Einbruch",
+      "description": "Ein anonymer Tipp führt zu einem Datenleck. Finde heraus, wer sich unbefugt Zugriff auf die Firmensysteme verschafft hat.",
+      "difficulty": "leicht",
+      "estimatedMinutes": 45,
+      "path": "/stories/story_01_der_einbruch/"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "chapterNumber": 1,
+  "title": "Der Einbruch",
+  "briefingMail": {
+    "from": "ermittlungsleiter@corp-security.internal",
+    "subject": "Neuer Fall: Unbefugter Zugriff",
+    "body": "Guten Morgen,\n\nletzte Nacht hat unser Sicherheitssystem einen Login außerhalb der Geschäftszeiten registriert. Jemand hat sich mit gültigen Zugangsdaten in unser System eingeloggt - mitten in der Nacht, als eigentlich niemand arbeiten sollte.\n\nBitte sichten Sie die Beweise und die Server-Logs und finden Sie heraus, wessen Zugangsdaten für den Login benutzt wurden.\n\nSobald Sie sich sicher sind, tragen Sie den Namen im Arrest-Tool ein.\n\n- Ermittlungsleiter, Corp-Security"
+  },
+  "evidence": [
+    {
+      "id": "ev_01",
+      "title": "Sicherheits-Alert",
+      "type": "text",
+      "content": "Automatische Meldung des Intrusion-Detection-Systems: Login außerhalb der Geschäftszeiten um 03:14 Uhr am 11.03.2024, IP-Adresse 192.168.14.22, Login erfolgreich."
+    },
+    {
+      "id": "ev_02",
+      "title": "Notiz der Nachtwache",
+      "type": "text",
+      "content": "Die Geschäftszeiten im Unternehmen sind Montag-Freitag von 08:00 bis 18:00 Uhr. Außerhalb dieser Zeiten sollte niemand ohne Sondergenehmigung im System aktiv sein."
+    }
+  ],
+  "additionalTables": {
+    "server_logs": {
+      "columns": ["id", "employee_id", "ip_address", "timestamp", "success"],
+      "rows": [
+        [1, 4, "192.168.14.10", "2024-03-11 09:03:00", true],
+        [2, 1, "192.168.14.22", "2024-03-11 03:14:00", true],
+        [3, 6, "192.168.14.11", "2024-03-11 08:47:00", true],
+        [4, 1, "192.168.14.22", "2024-03-10 22:58:00", false],
+        [5, 3, "192.168.14.30", "2024-03-11 09:15:00", true],
+        [6, 5, "192.168.14.45", "2024-03-11 10:02:00", true],
+        [7, 2, "192.168.14.19", "2024-03-11 03:14:00", false],
+        [8, 4, "192.168.14.22", "2024-03-09 14:22:00", true]
+      ]
+    }
+  },
+  "solution": {
+    "type": "exact_match",
+    "value": "Anna Müller"
+  },
+  "hints": [
+    "Schau dir die server_logs Tabelle an und filtere nach der IP-Adresse aus dem Sicherheits-Alert.",
+    "Achte auf den genauen Zeitstempel (11.03.2024, 03:14 Uhr) - es gibt mehr als einen Log-Eintrag mit dieser IP-Adresse.",
+    "Verknüpfe server_logs.employee_id mit employees.id, um den Namen zur ID zu finden."
+  ]
+}

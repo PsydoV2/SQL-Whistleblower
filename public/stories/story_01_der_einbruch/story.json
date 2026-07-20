@@ -1,0 +1,19 @@
+{
+  "id": "story_01_der_einbruch",
+  "title": "Der Einbruch",
+  "author": "SQL-Whistleblower Team",
+  "chapters": ["chapter_1.json", "chapter_2.json"],
+  "baseTables": {
+    "employees": {
+      "columns": ["id", "name", "department", "email", "hire_date"],
+      "rows": [
+        [1, "Anna Müller", "IT", "a.mueller@corp.com", "2019-03-01"],
+        [2, "Jonas Weber", "Finance", "j.weber@corp.com", "2020-07-15"],
+        [3, "Sophie Wagner", "HR", "s.wagner@corp.com", "2018-11-20"],
+        [4, "Markus Schmidt", "IT", "m.schmidt@corp.com", "2021-01-10"],
+        [5, "Laura Fischer", "Sales", "l.fischer@corp.com", "2022-05-03"],
+        [6, "Thomas Becker", "IT", "t.becker@corp.com", "2017-09-12"]
+      ]
+    }
+  }
+}

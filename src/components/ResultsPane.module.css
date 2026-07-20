@@ -2,26 +2,24 @@
   height: 100%;
   overflow: auto;
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
 }
 
 .placeholder {
   color: var(--text-faint);
-  font-size: 1rem;
+  font-size: 0.92rem;
+  font-family: var(--font-sans);
 }
 
 .error {
   color: var(--danger);
   background: var(--danger-muted);
   border: 1px solid var(--danger);
+  border-radius: 6px;
   padding: 0.6rem 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   white-space: pre-wrap;
-}
-
-.error::before {
-  content: "!! ";
 }
 
 .resultBlock {
@@ -30,6 +28,7 @@
 
 .emptyResult {
   color: var(--text-muted);
+  font-family: var(--font-sans);
 }
 
 .table {
@@ -39,21 +38,25 @@
 
 .table th,
 .table td {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-dim);
   padding: 0.3rem 0.6rem;
   text-align: left;
   white-space: nowrap;
 }
 
 .table th {
-  background: var(--border-dim);
+  background: linear-gradient(180deg, #f5f8fc 0%, #e2e9f2 100%);
   color: var(--text-bright);
-  font-weight: 400;
-  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.table tr:nth-child(even) td {
+  background: #f7fafd;
 }
 
 .rowCount {
   margin-top: 0.4rem;
   color: var(--text-faint);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
 }

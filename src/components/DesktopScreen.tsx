@@ -44,38 +44,38 @@ interface WindowConfig {
 }
 
 const WINDOW_CONFIG: Record<WindowKey, WindowConfig> = {
-  mail: { label: "Mail", glyph: "@", width: 400, height: 340, position: { x: 160, y: 20 } },
+  mail: { label: "Mail", glyph: "✉️", width: 400, height: 340, position: { x: 160, y: 20 } },
   evidence: {
     label: "Beweise",
-    glyph: "≡",
+    glyph: "🗂️",
     width: 400,
     height: 340,
     position: { x: 580, y: 20 },
   },
   sql: {
     label: "SQL-Konsole",
-    glyph: ">_",
+    glyph: "🖥️",
     width: 340,
     height: 340,
     position: { x: 1000, y: 20 },
   },
   tables: {
     label: "Tabellen",
-    glyph: "#",
+    glyph: "📊",
     width: 400,
     height: 340,
     position: { x: 160, y: 380 },
   },
   results: {
     label: "Ergebnis",
-    glyph: "Σ",
+    glyph: "📋",
     width: 400,
     height: 340,
     position: { x: 580, y: 380 },
   },
   arrest: {
     label: "Arrest-Tool",
-    glyph: "!",
+    glyph: "🚨",
     width: 340,
     height: 220,
     position: { x: 1000, y: 380 },

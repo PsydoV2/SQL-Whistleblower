@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Generated at build/dev time by scripts/copy-sql-wasm.mjs
+/public/sql-wasm-browser.wasm
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

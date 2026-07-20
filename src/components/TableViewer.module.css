@@ -8,9 +8,9 @@
 .tableList {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  min-width: 140px;
-  border-right: 1px solid var(--border);
+  gap: 0.3rem;
+  min-width: 150px;
+  border-right: 1px dashed var(--border-bright);
   padding-right: 0.75rem;
 }
 
@@ -18,22 +18,23 @@
   text-align: left;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 4px;
-  padding: 0.4rem 0.6rem;
+  padding: 0.35rem 0.6rem;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 1rem;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .tableButton:hover {
-  background: var(--surface-hover);
+  border-color: var(--border-bright);
+  color: var(--text);
 }
 
 .tableButtonActive {
-  background: var(--accent-muted);
-  color: var(--accent);
-  border-color: var(--accent-muted);
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
 }
 
 .tableWrapper {
@@ -45,21 +46,22 @@
 .table {
   width: 100%;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
 }
 
 .table th,
 .table td {
   border: 1px solid var(--border);
-  padding: 0.3rem 0.55rem;
+  padding: 0.3rem 0.6rem;
   text-align: left;
   white-space: nowrap;
 }
 
 .table th {
-  background: var(--surface-hover);
-  color: var(--text-muted);
-  font-weight: 600;
+  background: var(--border-dim);
+  color: var(--text-bright);
+  font-weight: 400;
+  text-transform: uppercase;
   position: sticky;
   top: 0;
 }

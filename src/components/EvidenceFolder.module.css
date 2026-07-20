@@ -6,19 +6,25 @@
 
 .item {
   border: 1px solid var(--border);
-  border-radius: 4px;
   padding: 0.7rem 0.85rem;
   background: var(--bg);
 }
 
 .itemTitle {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-bright);
   margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.itemTitle::before {
+  content: "» ";
+  color: var(--accent);
 }
 
 .itemContent {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--text-muted);
   line-height: 1.5;
   white-space: pre-wrap;
@@ -26,27 +32,27 @@
 
 .itemContent img {
   max-width: 100%;
-  border-radius: 4px;
+  filter: grayscale(0.3) sepia(0.2) hue-rotate(60deg);
 }
 
 .hints {
   margin-top: 0.5rem;
   padding-top: 0.9rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px dashed var(--border-bright);
 }
 
 .hintsTitle {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-faint);
+  letter-spacing: 0.06em;
+  color: var(--accent);
   margin-bottom: 0.5rem;
 }
 
 .hintsList {
   margin: 0;
-  padding-left: 1.1rem;
-  font-size: 0.82rem;
+  padding-left: 1.2rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
   display: flex;
   flex-direction: column;

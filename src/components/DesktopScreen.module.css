@@ -48,85 +48,67 @@
   text-transform: uppercase;
 }
 
-.tabBar {
-  display: flex;
-  gap: 0.3rem;
-  padding: 0.6rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-}
-
-.tab,
-.tabActive {
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0.35rem 1rem;
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  cursor: pointer;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-
-.tab:hover {
-  border-color: var(--text);
-  color: var(--text);
-}
-
-.tabActive {
-  background: var(--text);
-  border-color: var(--text);
-  color: var(--bg);
-}
-
-.content {
-  flex: 1;
-  padding: 1.5rem;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px var(--border-dim);
-  padding: 1.25rem;
+.desktop {
+  position: relative;
   flex: 1;
   min-height: 0;
   overflow: auto;
+  background-image: radial-gradient(var(--border-dim) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-.sqlSplit {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  flex: 1;
-  min-height: 0;
-}
-
-@media (max-width: 720px) {
-  .sqlSplit {
-    grid-template-columns: 1fr;
-  }
-}
-
-.sqlPane {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px var(--border-dim);
-  padding: 1rem;
-  min-height: 260px;
+.iconColumn {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
+  z-index: 1;
 }
 
-.paneLabel {
+.icon {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  width: 90px;
+  padding: 0.4rem 0.2rem;
+}
+
+.icon:hover,
+.icon:focus-visible {
+  color: var(--text-bright);
+  outline: none;
+}
+
+.iconGlyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border-bright);
+  background: var(--surface);
+  font-size: 1.4rem;
+  color: inherit;
+}
+
+.icon:hover .iconGlyph,
+.icon:focus-visible .iconGlyph {
+  box-shadow: 0 0 10px rgba(70, 232, 138, 0.4);
+  border-color: var(--text);
+}
+
+.iconLabel {
   font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-faint);
-  margin-bottom: 0.6rem;
+  text-align: center;
+  letter-spacing: 0.03em;
 }
 
 .centered {

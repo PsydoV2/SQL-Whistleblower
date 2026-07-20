@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Database } from "sql.js";
 import {
   loadFullStory,
@@ -18,6 +18,7 @@ import SqlConsole from "./SqlConsole";
 import ResultsPane from "./ResultsPane";
 import ArrestTool from "./ArrestTool";
 import ChapterTransition from "./ChapterTransition";
+import FloatingWindow, { type WindowPosition } from "./FloatingWindow";
 import styles from "./DesktopScreen.module.css";
 
 interface DesktopScreenProps {
@@ -26,15 +27,75 @@ interface DesktopScreenProps {
   onExitToMenu: () => void;
 }
 
-type WindowKey = "mail" | "evidence" | "tables" | "sql" | "arrest";
+type WindowKey =
+  | "mail"
+  | "evidence"
+  | "tables"
+  | "sql"
+  | "results"
+  | "arrest";
 
-const WINDOWS: { key: WindowKey; label: string }[] = [
-  { key: "mail", label: "Mail" },
-  { key: "evidence", label: "Beweise" },
-  { key: "tables", label: "Tabellen" },
-  { key: "sql", label: "SQL-Konsole" },
-  { key: "arrest", label: "Arrest-Tool" },
+interface WindowConfig {
+  label: string;
+  glyph: string;
+  width: number;
+  height: number;
+  position: WindowPosition;
+}
+
+const WINDOW_CONFIG: Record<WindowKey, WindowConfig> = {
+  mail: { label: "Mail", glyph: "@", width: 400, height: 340, position: { x: 160, y: 20 } },
+  evidence: {
+    label: "Beweise",
+    glyph: "≡",
+    width: 400,
+    height: 340,
+    position: { x: 580, y: 20 },
+  },
+  sql: {
+    label: "SQL-Konsole",
+    glyph: ">_",
+    width: 340,
+    height: 340,
+    position: { x: 1000, y: 20 },
+  },
+  tables: {
+    label: "Tabellen",
+    glyph: "#",
+    width: 400,
+    height: 340,
+    position: { x: 160, y: 380 },
+  },
+  results: {
+    label: "Ergebnis",
+    glyph: "Σ",
+    width: 400,
+    height: 340,
+    position: { x: 580, y: 380 },
+  },
+  arrest: {
+    label: "Arrest-Tool",
+    glyph: "!",
+    width: 340,
+    height: 220,
+    position: { x: 1000, y: 380 },
+  },
+};
+
+const WINDOW_ORDER: WindowKey[] = [
+  "mail",
+  "evidence",
+  "tables",
+  "sql",
+  "results",
+  "arrest",
 ];
+
+interface OpenWindow {
+  key: WindowKey;
+  position: WindowPosition;
+  zIndex: number;
+}
 
 type Transition =
   | { kind: "chapter"; nextChapter: number }
@@ -48,7 +109,10 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
   const [db, setDb] = useState<Database | null>(null);
   const [dbError, setDbError] = useState<string | null>(null);
 
-  const [activeWindow, setActiveWindow] = useState<WindowKey>("mail");
+  const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
+  const nextZIndexRef = useRef(10);
+  const desktopRef = useRef<HTMLDivElement | null>(null);
+
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null);
   const [queryError, setQueryError] = useState<string | null>(null);
   const [arrestError, setArrestError] = useState<string | null>(null);
@@ -64,6 +128,9 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         const startChapter = progress?.currentChapter ?? 1;
         setCurrentChapterNumber(startChapter);
         setChapterProgress(storyId, startChapter);
+        setOpenWindows([
+          { key: "mail", position: WINDOW_CONFIG.mail.position, zIndex: nextZIndexRef.current++ },
+        ]);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -125,6 +192,49 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     (chapter) => chapter.chapterNumber === currentChapterNumber,
   );
 
+  function openWindow(key: WindowKey) {
+    setOpenWindows((prev) => {
+      if (prev.some((win) => win.key === key)) {
+        return prev.map((win) =>
+          win.key === key ? { ...win, zIndex: nextZIndexRef.current++ } : win,
+        );
+      }
+      return [
+        ...prev,
+        {
+          key,
+          position: WINDOW_CONFIG[key].position,
+          zIndex: nextZIndexRef.current++,
+        },
+      ];
+    });
+  }
+
+  function closeWindow(key: WindowKey) {
+    setOpenWindows((prev) => prev.filter((win) => win.key !== key));
+  }
+
+  function focusWindow(key: WindowKey) {
+    setOpenWindows((prev) =>
+      prev.map((win) =>
+        win.key === key ? { ...win, zIndex: nextZIndexRef.current++ } : win,
+      ),
+    );
+  }
+
+  function moveWindow(key: WindowKey, position: WindowPosition) {
+    const rect = desktopRef.current?.getBoundingClientRect();
+    const maxX = rect ? Math.max(0, rect.width - 120) : position.x;
+    const maxY = rect ? Math.max(0, rect.height - 40) : position.y;
+    const clamped = {
+      x: Math.min(Math.max(position.x, 0), maxX),
+      y: Math.min(Math.max(position.y, 0), maxY),
+    };
+    setOpenWindows((prev) =>
+      prev.map((win) => (win.key === key ? { ...win, position: clamped } : win)),
+    );
+  }
+
   function handleRunQuery(sqlText: string) {
     if (!db) {
       setQueryError("Datenbank wird noch geladen, bitte kurz warten.");
@@ -138,6 +248,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
       setQueryResults(null);
       setQueryError(err instanceof Error ? err.message : String(err));
     }
+    openWindow("results");
   }
 
   function handleArrestSubmit(name: string) {
@@ -167,8 +278,42 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
   function handleContinueToNextChapter(nextChapter: number) {
     setChapterProgress(storyId, nextChapter);
     setCurrentChapterNumber(nextChapter);
-    setActiveWindow("mail");
+    setArrestError(null);
+    setOpenWindows([
+      { key: "mail", position: WINDOW_CONFIG.mail.position, zIndex: nextZIndexRef.current++ },
+    ]);
     setTransition(null);
+  }
+
+  function renderWindowContent(key: WindowKey) {
+    if (!currentChapter) return null;
+    switch (key) {
+      case "mail":
+        return <MailClient mail={currentChapter.briefingMail} />;
+      case "evidence":
+        return (
+          <EvidenceFolder
+            evidence={currentChapter.evidence}
+            hints={currentChapter.hints}
+          />
+        );
+      case "tables":
+        return <TableViewer tables={cumulativeTables} />;
+      case "sql":
+        return dbError ? (
+          <div className={styles.centered}>Datenbank-Fehler: {dbError}</div>
+        ) : (
+          <SqlConsole onRunQuery={handleRunQuery} />
+        );
+      case "results":
+        return <ResultsPane results={queryResults} error={queryError} />;
+      case "arrest":
+        return (
+          <ArrestTool onSubmit={handleArrestSubmit} errorMessage={arrestError} />
+        );
+      default:
+        return null;
+    }
   }
 
   if (loadError) {
@@ -203,64 +348,36 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         </div>
       </header>
 
-      <nav className={styles.tabBar}>
-        {WINDOWS.map((win) => (
-          <button
-            key={win.key}
-            className={activeWindow === win.key ? styles.tabActive : styles.tab}
-            onClick={() => setActiveWindow(win.key)}
-          >
-            {win.label}
-          </button>
-        ))}
-      </nav>
+      <div className={styles.desktop} ref={desktopRef}>
+        <div className={styles.iconColumn}>
+          {WINDOW_ORDER.map((key) => (
+            <button
+              key={key}
+              className={styles.icon}
+              onClick={() => openWindow(key)}
+            >
+              <span className={styles.iconGlyph}>{WINDOW_CONFIG[key].glyph}</span>
+              <span className={styles.iconLabel}>{WINDOW_CONFIG[key].label}</span>
+            </button>
+          ))}
+        </div>
 
-      <main className={styles.content}>
-        {activeWindow === "mail" && (
-          <div className={styles.panel}>
-            <MailClient mail={currentChapter.briefingMail} />
-          </div>
-        )}
-        {activeWindow === "evidence" && (
-          <div className={styles.panel}>
-            <EvidenceFolder
-              evidence={currentChapter.evidence}
-              hints={currentChapter.hints}
-            />
-          </div>
-        )}
-        {activeWindow === "tables" && (
-          <div className={styles.panel}>
-            <TableViewer tables={cumulativeTables} />
-          </div>
-        )}
-        {activeWindow === "sql" && (
-          <div className={styles.sqlSplit}>
-            <div className={styles.sqlPane}>
-              <div className={styles.paneLabel}>SQL-Konsole</div>
-              {dbError ? (
-                <div className={styles.centered}>
-                  Datenbank-Fehler: {dbError}
-                </div>
-              ) : (
-                <SqlConsole onRunQuery={handleRunQuery} />
-              )}
-            </div>
-            <div className={styles.sqlPane}>
-              <div className={styles.paneLabel}>Ergebnis</div>
-              <ResultsPane results={queryResults} error={queryError} />
-            </div>
-          </div>
-        )}
-        {activeWindow === "arrest" && (
-          <div className={styles.panel}>
-            <ArrestTool
-              onSubmit={handleArrestSubmit}
-              errorMessage={arrestError}
-            />
-          </div>
-        )}
-      </main>
+        {openWindows.map((win) => (
+          <FloatingWindow
+            key={win.key}
+            title={WINDOW_CONFIG[win.key].label}
+            position={win.position}
+            zIndex={win.zIndex}
+            width={WINDOW_CONFIG[win.key].width}
+            height={WINDOW_CONFIG[win.key].height}
+            onClose={() => closeWindow(win.key)}
+            onFocus={() => focusWindow(win.key)}
+            onMove={(position) => moveWindow(win.key, position)}
+          >
+            {renderWindowContent(win.key)}
+          </FloatingWindow>
+        ))}
+      </div>
 
       {transition?.kind === "chapter" && (
         <ChapterTransition

@@ -4,7 +4,7 @@
   "briefingMail": {
     "from": "ermittlungsleiter@corp-security.internal",
     "subject": "Re: Neuer Fall - neue Entwicklung",
-    "body": "Guten Tag,\n\ngute Arbeit soweit. Es gibt aber ein Problem: Anna Müller bestreitet, in der fraglichen Nacht überhaupt im Gebäude gewesen zu sein. Sie sagt, ihr Passwort müsse gestohlen worden sein.\n\nWir haben Zugriff auf das Zutrittskontrollsystem (badge_logs) und das Data-Loss-Prevention-System (file_transfers) bekommen. Prüfen Sie, ob Anna Müllers Aussage stimmt - und wenn ja, wer tatsächlich vor Ort war und die Daten entwendet hat.\n\n- Ermittlungsleiter, Corp-Security"
+    "body": "Guten Tag,\n\ngute Arbeit soweit. Es gibt aber ein Problem: Anna Müller bestreitet, in der fraglichen Nacht überhaupt im Gebäude gewesen zu sein. Sie sagt, ihr Passwort müsse gestohlen worden sein.\n\nWir haben Zugriff auf das Zutrittskontrollsystem (badge_logs) und das Data-Loss-Prevention-System (file_transfers) bekommen. Wichtig: Wer auch immer sich mit Annas gestohlenen Zugangsdaten eingeloggt hat, taucht in allen System-Logs als 'Anna Müller' auf - das System kennt ja nur das benutzte Konto, nicht die Person davor. Das Zutrittskontrollsystem am Serverraum protokolliert aber physische Badge-Scans, die sich nicht fälschen lassen.\n\nPrüfen Sie, ob Anna Müllers Aussage stimmt - und wenn ja, wer tatsächlich physisch vor Ort war.\n\n- Ermittlungsleiter, Corp-Security"
   },
   "evidence": [
     {
@@ -17,7 +17,13 @@
       "id": "ev_04",
       "title": "DLP-Alarm",
       "type": "text",
-      "content": "Das Data-Loss-Prevention-System meldete kurz nach dem Login einen Dateitransfer an eine externe E-Mail-Adresse. Siehe Tabelle file_transfers."
+      "content": "Das Data-Loss-Prevention-System meldete kurz nach dem Login (03:14 Uhr) einen Dateitransfer an eine externe, unternehmensfremde E-Mail-Adresse. Der Transfer lief über das Konto, mit dem auch der Login erfolgte. Siehe Tabelle file_transfers."
+    },
+    {
+      "id": "ev_05",
+      "title": "Hinweis der Facility-Abteilung",
+      "type": "text",
+      "content": "Der Serverraum ist zusätzlich zum Hauptgebäude mit einem eigenen Badge-Leser gesichert. Jeder Zutritt wird mit Mitarbeiter-ID, Uhrzeit und Datum protokolliert - unabhängig davon, welches Benutzerkonto am Rechner benutzt wird."
     }
   ],
   "additionalTables": {
@@ -29,13 +35,21 @@
         [3, 6, "2024-03-11 08:40:00", "Haupteingang"],
         [4, 3, "2024-03-11 08:50:00", "Haupteingang"],
         [5, 4, "2024-03-11 03:20:00", "Serverraum"],
-        [6, 2, "2024-03-11 08:58:00", "Haupteingang"]
+        [6, 2, "2024-03-11 08:58:00", "Haupteingang"],
+        [7, 1, "2024-03-10 08:45:00", "Haupteingang"],
+        [8, 5, "2024-03-11 08:35:00", "Haupteingang"],
+        [9, 6, "2024-03-09 14:00:00", "Serverraum"]
       ]
     },
     "file_transfers": {
       "columns": ["id", "employee_id", "file_name", "destination_email", "transfer_time"],
       "rows": [
-        [1, 4, "kundenliste_2024.csv", "m.schmidt.backup@mailbox-extern.com", "2024-03-11 03:16:00"]
+        [1, 2, "rechnung_maerz.pdf", "j.weber@partner-firma.com", "2024-03-11 10:15:00"],
+        [2, 1, "kundenliste_2024.csv", "a.mueller.backup@mailbox-extern.com", "2024-03-11 03:16:00"],
+        [3, 5, "angebot_kunde.docx", "l.fischer@partner-firma.com", "2024-03-11 11:02:00"],
+        [4, 3, "bewerbung_scan.pdf", "s.wagner@hr-external.com", "2024-03-10 09:20:00"],
+        [5, 1, "wochenbericht.xlsx", "a.mueller@corp.com", "2024-03-08 16:40:00"],
+        [6, 4, "projektplan.pptx", "m.schmidt@corp.com", "2024-03-11 09:30:00"]
       ]
     }
   },
@@ -44,8 +58,8 @@
     "value": "Markus Schmidt"
   },
   "hints": [
-    "Prüfe die badge_logs Tabelle: War Anna Müller laut Zutrittssystem überhaupt zur fraglichen Zeit im Gebäude?",
-    "Wer hatte laut badge_logs um 03:14 Uhr Zutritt zum Serverraum?",
-    "Die file_transfers Tabelle zeigt, wer die Datei tatsächlich verschickt hat - vergleiche die employee_id mit den Serverraum-Zutritten."
+    "Die file_transfers-Zeile zur Tatzeit (03:16 Uhr) läuft über employee_id 1 - das ist nur das gekaperte Konto, nicht der Täter. Damit lässt sich der Fall allein nicht lösen.",
+    "Schau in badge_logs nach: Wann hat Anna Müller laut Zutrittssystem das Gebäude überhaupt betreten? Passt das zur Login-Zeit 03:14 Uhr?",
+    "Filtere badge_logs nach entrance = 'Serverraum' am 11.03.2024 - wer war zur Tatzeit tatsächlich physisch dort?"
   ]
 }

@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  padding: 0.85rem 1.5rem;
+  padding: 0.7rem 1.5rem;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
@@ -16,11 +16,13 @@
 .backButton {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 4px;
   color: var(--text-muted);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .backButton:hover {
@@ -31,24 +33,24 @@
 .titleBlock {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.05rem;
 }
 
 .storyTitle {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--text-faint);
 }
 
 .chapterTitle {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  text-transform: uppercase;
 }
 
 .tabBar {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.3rem;
   padding: 0.6rem 1.5rem;
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
@@ -58,23 +60,23 @@
 .tabActive {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
+  padding: 0.35rem 1rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .tab:hover {
-  border-color: var(--accent);
+  border-color: var(--text);
   color: var(--text);
 }
 
 .tabActive {
-  background: var(--accent-muted);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
 }
 
 .content {
@@ -88,7 +90,7 @@
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--border-dim);
   padding: 1.25rem;
   flex: 1;
   min-height: 0;
@@ -112,7 +114,7 @@
 .sqlPane {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--border-dim);
   padding: 1rem;
   min-height: 260px;
   display: flex;
@@ -120,9 +122,9 @@
 }
 
 .paneLabel {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--text-faint);
   margin-bottom: 0.6rem;
 }
@@ -133,5 +135,5 @@
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }

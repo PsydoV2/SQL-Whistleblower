@@ -14,7 +14,10 @@ function MainMenu({ onSelectStory }: MainMenuProps) {
     <div className={styles.menu}>
       <header className={styles.header}>
         <h1>SQL-Whistleblower</h1>
-        <p className={styles.subtitle}>Fälle lösen. Mit echtem SQL.</p>
+        <p className={styles.subtitle}>
+          &gt; Fälle lösen. Mit echtem SQL.
+          <span className="blinkCursor">_</span>
+        </p>
       </header>
       <div className={styles.grid}>
         {registry.stories.map((entry) => {
@@ -35,10 +38,12 @@ function MainMenu({ onSelectStory }: MainMenuProps) {
                   </span>
                 ) : null}
               </div>
-              <p className={styles.description}>{entry.description}</p>
-              <div className={styles.meta}>
-                <span>{entry.difficulty}</span>
-                <span>~{entry.estimatedMinutes} Min.</span>
+              <div className={styles.cardBody}>
+                <p className={styles.description}>{entry.description}</p>
+                <div className={styles.meta}>
+                  <span>{entry.difficulty}</span>
+                  <span>~{entry.estimatedMinutes} Min.</span>
+                </div>
               </div>
             </button>
           );

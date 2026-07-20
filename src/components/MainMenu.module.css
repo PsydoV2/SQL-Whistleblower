@@ -1,6 +1,6 @@
 .menu {
   min-height: 100vh;
-  padding: 3rem 1.5rem;
+  padding: 3.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,81 +12,92 @@
 }
 
 .header h1 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 2.6rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
   margin: 0;
+  text-transform: uppercase;
 }
 
 .subtitle {
   color: var(--text-muted);
-  margin: 0.4rem 0 0;
-  font-size: 0.95rem;
+  margin: 0.3rem 0 0;
+  font-size: 1.1rem;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.1rem;
   width: 100%;
-  max-width: 960px;
+  max-width: 980px;
 }
 
 .card {
   text-align: left;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1.1rem 1.2rem;
+  box-shadow: inset 0 0 0 1px var(--border-dim);
+  padding: 0;
   color: var(--text);
   cursor: pointer;
   font: inherit;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .card:hover,
 .card:focus-visible {
-  border-color: var(--accent);
-  background: var(--surface-hover);
+  border-color: var(--text);
+  box-shadow: 0 0 12px rgba(70, 232, 138, 0.35);
   outline: none;
 }
 
 .cardHeader {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  background: var(--border-dim);
+  padding: 0.5rem 0.9rem;
 }
 
 .cardHeader h2 {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   margin: 0;
-  font-weight: 600;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem 1.1rem;
 }
 
 .badge {
-  font-size: 0.7rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-  background: var(--accent-muted);
+  font-size: 0.85rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--accent);
   color: var(--accent);
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .description {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .meta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: var(--text-faint);
-  font-family: var(--font-mono);
+  text-transform: uppercase;
 }

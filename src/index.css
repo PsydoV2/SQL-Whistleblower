@@ -1,51 +1,41 @@
-:root {
-  --bg: #14161b;
-  --surface: #1b1e25;
-  --surface-hover: #21252e;
-  --border: #2c3038;
-  --text: #d7d9de;
-  --text-muted: #9aa0ab;
-  --text-faint: #656b78;
-  --accent: #7fb4e8;
-  --accent-muted: rgba(127, 180, 232, 0.14);
-  --danger: #e08585;
-  --danger-muted: rgba(224, 133, 133, 0.14);
-  --success: #86c99a;
-  --success-muted: rgba(134, 201, 154, 0.14);
+@font-face {
+  font-family: "VT323";
+  src: url("./assets/fonts/VT323-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-  --font-sans:
-    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+:root {
+  --bg: #050a07;
+  --surface: #0a1510;
+  --surface-hover: #112119;
+  --border: #1e5038;
+  --border-bright: #2f8a5c;
+  --border-dim: #143526;
+  --text: #46e88a;
+  --text-bright: #baffdf;
+  --text-muted: #2f9d64;
+  --text-faint: #1d6640;
+  --accent: #ffb300;
+  --accent-muted: rgba(255, 179, 0, 0.14);
+  --danger: #ff5c5c;
+  --danger-muted: rgba(255, 92, 92, 0.14);
+  --success: #7dffab;
+  --success-muted: rgba(125, 255, 171, 0.14);
+
+  --font-sans: "VT323", ui-monospace, "Share Tech Mono", Consolas, monospace;
+  --font-mono: "VT323", ui-monospace, "Share Tech Mono", Consolas, monospace;
 
   color-scheme: dark;
   color: var(--text);
   background: var(--bg);
-  font: 15px/1.5 var(--font-sans);
+  font: 20px/1.4 var(--font-sans);
+  letter-spacing: 0.02em;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f4f4f2;
-    --surface: #ffffff;
-    --surface-hover: #ececea;
-    --border: #d8d8d4;
-    --text: #26282c;
-    --text-muted: #5a5e66;
-    --text-faint: #8a8e96;
-    --accent: #2f6fb0;
-    --accent-muted: rgba(47, 111, 176, 0.1);
-    --danger: #b3413f;
-    --danger-muted: rgba(179, 65, 63, 0.1);
-    --success: #3f8a5a;
-    --success-muted: rgba(63, 138, 90, 0.1);
-
-    color-scheme: light;
-  }
 }
 
 * {
@@ -54,6 +44,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 #root {
@@ -63,14 +54,107 @@ body {
 h1,
 h2,
 h3 {
-  font-weight: 600;
+  font-weight: 400;
   margin: 0;
+  text-shadow: 0 0 6px rgba(70, 232, 138, 0.55);
 }
 
 button {
   font: inherit;
+  letter-spacing: 0.02em;
+}
+
+input,
+textarea {
+  font: inherit;
+  letter-spacing: 0.02em;
 }
 
 table {
   border-collapse: collapse;
+}
+
+::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* Retro scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-bright) var(--bg);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border: 2px solid var(--bg);
+}
+
+/* CRT scanline + vignette overlay, fixed above all content */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.18) 3px
+    ),
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0) 55%,
+      rgba(0, 0, 0, 0.35) 100%
+    );
+  mix-blend-mode: multiply;
+  animation: crt-flicker 6s infinite;
+}
+
+@keyframes crt-flicker {
+  0%,
+  96%,
+  100% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.94;
+  }
+  98% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.blinkCursor {
+  display: inline-block;
+  animation: blink 1s step-start infinite;
+  color: var(--text-bright);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-overlay {
+    animation: none;
+  }
+  .blinkCursor {
+    animation: none;
+  }
 }

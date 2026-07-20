@@ -65,3 +65,25 @@
   padding: 1rem;
   color: var(--text);
 }
+
+.resizeHandle {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(60, 90, 130, 0.55) 38%,
+      rgba(60, 90, 130, 0.55) 46%,
+      transparent 46%,
+      transparent 62%,
+      rgba(60, 90, 130, 0.55) 62%,
+      rgba(60, 90, 130, 0.55) 70%,
+      transparent 70%
+    );
+}

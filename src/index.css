@@ -1,37 +1,29 @@
-@font-face {
-  font-family: "VT323";
-  src: url("./assets/fonts/VT323-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  --bg: #050a07;
-  --surface: #0a1510;
-  --surface-hover: #112119;
-  --border: #1e5038;
-  --border-bright: #2f8a5c;
-  --border-dim: #143526;
-  --text: #46e88a;
-  --text-bright: #baffdf;
-  --text-muted: #2f9d64;
-  --text-faint: #1d6640;
-  --accent: #ffb300;
-  --accent-muted: rgba(255, 179, 0, 0.14);
-  --danger: #ff5c5c;
-  --danger-muted: rgba(255, 92, 92, 0.14);
-  --success: #7dffab;
-  --success-muted: rgba(125, 255, 171, 0.14);
+  --bg: #dbe8f6;
+  --surface: #ffffff;
+  --surface-hover: #eaf2fc;
+  --border: #a9bdd6;
+  --border-bright: #5b8fd6;
+  --border-dim: #cdddf0;
+  --text: #1f2733;
+  --text-bright: #0b3d78;
+  --text-muted: #52606f;
+  --text-faint: #8593a3;
+  --accent: #2f6fc7;
+  --accent-muted: rgba(47, 111, 199, 0.12);
+  --danger: #c0392b;
+  --danger-muted: rgba(192, 57, 43, 0.12);
+  --success: #2f9e44;
+  --success-muted: rgba(47, 158, 68, 0.12);
 
-  --font-sans: "VT323", ui-monospace, "Share Tech Mono", Consolas, monospace;
-  --font-mono: "VT323", ui-monospace, "Share Tech Mono", Consolas, monospace;
+  --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: Consolas, "Courier New", monospace;
 
-  color-scheme: dark;
+  color-scheme: light;
   color: var(--text);
-  background: var(--bg);
-  font: 20px/1.4 var(--font-sans);
-  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #bcd6f0 0%, #eef4fb 45%, #dbe8f5 100%)
+    fixed;
+  font: 15px/1.5 var(--font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44,7 +36,6 @@
 
 body {
   margin: 0;
-  overflow-x: hidden;
 }
 
 #root {
@@ -54,35 +45,28 @@ body {
 h1,
 h2,
 h3 {
-  font-weight: 400;
+  font-weight: 600;
   margin: 0;
-  text-shadow: 0 0 6px rgba(70, 232, 138, 0.55);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 button {
   font: inherit;
-  letter-spacing: 0.02em;
 }
 
 input,
 textarea {
   font: inherit;
-  letter-spacing: 0.02em;
 }
 
 table {
   border-collapse: collapse;
 }
 
-::selection {
-  background: var(--text);
-  color: var(--bg);
-}
-
-/* Retro scrollbars */
+/* Light, unobtrusive scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--border-bright) var(--bg);
+  scrollbar-color: var(--border-bright) var(--border-dim);
 }
 
 *::-webkit-scrollbar {
@@ -91,70 +75,11 @@ table {
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--border-dim);
 }
 
 *::-webkit-scrollbar-thumb {
   background: var(--border-bright);
-  border: 2px solid var(--bg);
-}
-
-/* CRT scanline + vignette overlay, fixed above all content */
-.crt-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  background:
-    repeating-linear-gradient(
-      rgba(0, 0, 0, 0) 0px,
-      rgba(0, 0, 0, 0) 2px,
-      rgba(0, 0, 0, 0.18) 3px
-    ),
-    radial-gradient(
-      ellipse at center,
-      rgba(0, 0, 0, 0) 55%,
-      rgba(0, 0, 0, 0.35) 100%
-    );
-  mix-blend-mode: multiply;
-  animation: crt-flicker 6s infinite;
-}
-
-@keyframes crt-flicker {
-  0%,
-  96%,
-  100% {
-    opacity: 1;
-  }
-  97% {
-    opacity: 0.94;
-  }
-  98% {
-    opacity: 1;
-  }
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.blinkCursor {
-  display: inline-block;
-  animation: blink 1s step-start infinite;
-  color: var(--text-bright);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .crt-overlay {
-    animation: none;
-  }
-  .blinkCursor {
-    animation: none;
-  }
+  border: 2px solid var(--border-dim);
+  border-radius: 6px;
 }

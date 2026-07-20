@@ -2,11 +2,15 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--border-bright);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--border-dim);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(10, 30, 60, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
   min-width: 260px;
   min-height: 160px;
+  overflow: hidden;
 }
 
 .titleBar {
@@ -14,9 +18,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
-  background: var(--border-dim);
-  color: var(--text-bright);
+  padding: 0.4rem 0.5rem 0.4rem 0.85rem;
+  background: linear-gradient(180deg, #7fb1ee 0%, #4c84d0 45%, #3169b6 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: #ffffff;
   cursor: grab;
   user-select: none;
   touch-action: none;
@@ -28,29 +33,29 @@
 }
 
 .title {
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .closeButton {
-  background: transparent;
-  border: 1px solid var(--text-faint);
-  color: var(--text-muted);
-  width: 1.6rem;
-  height: 1.6rem;
+  background: linear-gradient(180deg, #f18a80 0%, #d5453a 55%, #b6291f 100%);
+  border: 1px solid #8f1c14;
+  border-radius: 4px;
+  color: #ffffff;
+  width: 1.5rem;
+  height: 1.5rem;
   line-height: 1;
+  font-size: 0.95rem;
   cursor: pointer;
-  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .closeButton:hover {
-  border-color: var(--danger);
-  color: var(--danger);
-  background: var(--danger-muted);
+  background: linear-gradient(180deg, #ff9c92 0%, #e2564a 55%, #c53528 100%);
 }
 
 .body {
@@ -58,4 +63,5 @@
   min-height: 0;
   overflow: auto;
   padding: 1rem;
+  color: var(--text);
 }

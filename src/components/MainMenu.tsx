@@ -14,10 +14,7 @@ function MainMenu({ onSelectStory }: MainMenuProps) {
     <div className={styles.menu}>
       <header className={styles.header}>
         <h1>SQL-Whistleblower</h1>
-        <p className={styles.subtitle}>
-          &gt; Fälle lösen. Mit echtem SQL.
-          <span className="blinkCursor">_</span>
-        </p>
+        <p className={styles.subtitle}>Fälle lösen. Mit echtem SQL.</p>
       </header>
       <div className={styles.grid}>
         {registry.stories.map((entry) => {

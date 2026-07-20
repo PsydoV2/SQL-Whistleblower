@@ -9,24 +9,23 @@
   flex-direction: column;
   gap: 0.25rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px dashed var(--border-bright);
-  font-size: 1rem;
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 0.85rem;
 }
 
 .headerRow span {
   color: var(--text-faint);
   margin-right: 0.4rem;
-  text-transform: uppercase;
 }
 
 .subject {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
   color: var(--text-bright);
-  text-transform: uppercase;
 }
 
 .body {
   white-space: pre-wrap;
   line-height: 1.55;
-  font-size: 1.05rem;
+  font-size: 0.92rem;
 }

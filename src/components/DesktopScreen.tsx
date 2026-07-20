@@ -18,7 +18,11 @@ import SqlConsole from "./SqlConsole";
 import ResultsPane from "./ResultsPane";
 import ArrestTool from "./ArrestTool";
 import ChapterTransition from "./ChapterTransition";
-import FloatingWindow, { type WindowPosition } from "./FloatingWindow";
+import FloatingWindow, {
+  type WindowPosition,
+  type WindowSize,
+} from "./FloatingWindow";
+import Taskbar from "./Taskbar";
 import styles from "./DesktopScreen.module.css";
 
 interface DesktopScreenProps {
@@ -82,18 +86,18 @@ const WINDOW_CONFIG: Record<WindowKey, WindowConfig> = {
   },
 };
 
-const WINDOW_ORDER: WindowKey[] = [
+const DESKTOP_ICON_ORDER: WindowKey[] = [
   "mail",
   "evidence",
   "tables",
   "sql",
-  "results",
   "arrest",
 ];
 
 interface OpenWindow {
   key: WindowKey;
   position: WindowPosition;
+  size: WindowSize;
   zIndex: number;
 }
 
@@ -129,7 +133,12 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         setCurrentChapterNumber(startChapter);
         setChapterProgress(storyId, startChapter);
         setOpenWindows([
-          { key: "mail", position: WINDOW_CONFIG.mail.position, zIndex: nextZIndexRef.current++ },
+          {
+            key: "mail",
+            position: WINDOW_CONFIG.mail.position,
+            size: { width: WINDOW_CONFIG.mail.width, height: WINDOW_CONFIG.mail.height },
+            zIndex: nextZIndexRef.current++,
+          },
         ]);
       })
       .catch((err) => {
@@ -204,6 +213,10 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         {
           key,
           position: WINDOW_CONFIG[key].position,
+          size: {
+            width: WINDOW_CONFIG[key].width,
+            height: WINDOW_CONFIG[key].height,
+          },
           zIndex: nextZIndexRef.current++,
         },
       ];
@@ -232,6 +245,12 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     };
     setOpenWindows((prev) =>
       prev.map((win) => (win.key === key ? { ...win, position: clamped } : win)),
+    );
+  }
+
+  function resizeWindow(key: WindowKey, size: WindowSize) {
+    setOpenWindows((prev) =>
+      prev.map((win) => (win.key === key ? { ...win, size } : win)),
     );
   }
 
@@ -280,7 +299,12 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     setCurrentChapterNumber(nextChapter);
     setArrestError(null);
     setOpenWindows([
-      { key: "mail", position: WINDOW_CONFIG.mail.position, zIndex: nextZIndexRef.current++ },
+      {
+        key: "mail",
+        position: WINDOW_CONFIG.mail.position,
+        size: { width: WINDOW_CONFIG.mail.width, height: WINDOW_CONFIG.mail.height },
+        zIndex: nextZIndexRef.current++,
+      },
     ]);
     setTransition(null);
   }
@@ -334,23 +358,16 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     );
   }
 
+  const maxZIndex = openWindows.reduce(
+    (max, win) => Math.max(max, win.zIndex),
+    -Infinity,
+  );
+
   return (
     <div className={styles.screen}>
-      <header className={styles.topBar}>
-        <button className={styles.backButton} onClick={onExitToMenu}>
-          ← Hauptmenü
-        </button>
-        <div className={styles.titleBlock}>
-          <span className={styles.storyTitle}>{loadedStory.story.title}</span>
-          <span className={styles.chapterTitle}>
-            Kapitel {currentChapter.chapterNumber}: {currentChapter.title}
-          </span>
-        </div>
-      </header>
-
       <div className={styles.desktop} ref={desktopRef}>
         <div className={styles.iconColumn}>
-          {WINDOW_ORDER.map((key) => (
+          {DESKTOP_ICON_ORDER.map((key) => (
             <button
               key={key}
               className={styles.icon}
@@ -367,17 +384,30 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
             key={win.key}
             title={WINDOW_CONFIG[win.key].label}
             position={win.position}
+            size={win.size}
             zIndex={win.zIndex}
-            width={WINDOW_CONFIG[win.key].width}
-            height={WINDOW_CONFIG[win.key].height}
             onClose={() => closeWindow(win.key)}
             onFocus={() => focusWindow(win.key)}
             onMove={(position) => moveWindow(win.key, position)}
+            onResize={(size) => resizeWindow(win.key, size)}
           >
             {renderWindowContent(win.key)}
           </FloatingWindow>
         ))}
       </div>
+
+      <Taskbar
+        storyTitle={loadedStory.story.title}
+        chapterLabel={`Kapitel ${currentChapter.chapterNumber}: ${currentChapter.title}`}
+        windows={openWindows.map((win) => ({
+          key: win.key,
+          label: WINDOW_CONFIG[win.key].label,
+          glyph: WINDOW_CONFIG[win.key].glyph,
+          isActive: win.zIndex === maxZIndex,
+        }))}
+        onFocusWindow={(key) => focusWindow(key as WindowKey)}
+        onExitToMenu={onExitToMenu}
+      />
 
       {transition?.kind === "chapter" && (
         <ChapterTransition

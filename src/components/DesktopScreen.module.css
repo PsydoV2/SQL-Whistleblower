@@ -4,52 +4,6 @@
   flex-direction: column;
 }
 
-.topBar {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 0.6rem 1.5rem;
-  background: linear-gradient(180deg, #7db0ec 0%, #4a82cf 45%, #3269b8 100%);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 2px 6px rgba(0, 0, 0, 0.25);
-}
-
-.backButton {
-  background: linear-gradient(180deg, #ffffff 0%, #e2e7ee 100%);
-  border: 1px solid #7891ab;
-  border-radius: 5px;
-  color: var(--text);
-  padding: 0.35rem 0.9rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
-}
-
-.backButton:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #d7e7fb 100%);
-  border-color: var(--accent);
-}
-
-.titleBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 0.05rem;
-}
-
-.storyTitle {
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.chapterTitle {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #ffffff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-}
-
 .desktop {
   position: relative;
   flex: 1;

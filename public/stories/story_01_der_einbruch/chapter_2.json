@@ -30,26 +30,49 @@
     "badge_logs": {
       "columns": ["id", "employee_id", "scan_time", "entrance"],
       "rows": [
-        [1, 1, "2024-03-11 08:55:00", "Haupteingang"],
-        [2, 4, "2024-03-11 02:58:00", "Serverraum"],
-        [3, 6, "2024-03-11 08:40:00", "Haupteingang"],
-        [4, 3, "2024-03-11 08:50:00", "Haupteingang"],
-        [5, 4, "2024-03-11 03:20:00", "Serverraum"],
-        [6, 2, "2024-03-11 08:58:00", "Haupteingang"],
-        [7, 1, "2024-03-10 08:45:00", "Haupteingang"],
+        [1, 4, "2024-03-11 02:58:00", "Serverraum"],
+        [2, 4, "2024-03-11 03:05:00", "Serverraum"],
+        [3, 4, "2024-03-11 03:20:00", "Serverraum"],
+        [4, 1, "2024-03-11 08:55:00", "Haupteingang"],
+        [5, 6, "2024-03-11 08:40:00", "Haupteingang"],
+        [6, 3, "2024-03-11 08:50:00", "Haupteingang"],
+        [7, 2, "2024-03-11 08:58:00", "Haupteingang"],
         [8, 5, "2024-03-11 08:35:00", "Haupteingang"],
-        [9, 6, "2024-03-09 14:00:00", "Serverraum"]
+        [9, 7, "2024-03-11 08:33:00", "Haupteingang"],
+        [10, 8, "2024-03-11 08:47:00", "Haupteingang"],
+        [11, 9, "2024-03-11 09:02:00", "Haupteingang"],
+        [12, 10, "2024-03-11 08:29:00", "Haupteingang"],
+        [13, 11, "2024-03-11 09:15:00", "Haupteingang"],
+        [14, 12, "2024-03-11 08:52:00", "Haupteingang"],
+        [15, 13, "2024-03-11 09:20:00", "Haupteingang"],
+        [16, 14, "2024-03-11 08:41:00", "Haupteingang"],
+        [17, 1, "2024-03-11 17:50:00", "Haupteingang"],
+        [18, 1, "2024-03-10 08:45:00", "Haupteingang"],
+        [19, 3, "2024-03-10 08:48:00", "Haupteingang"],
+        [20, 2, "2024-03-08 09:10:00", "Haupteingang"],
+        [21, 4, "2024-03-11 10:05:00", "Serverraum"],
+        [22, 6, "2024-03-11 11:30:00", "Serverraum"],
+        [23, 10, "2024-03-08 13:15:00", "Serverraum"],
+        [24, 4, "2024-03-10 15:40:00", "Serverraum"],
+        [25, 6, "2024-03-09 14:00:00", "Serverraum"]
       ]
     },
     "file_transfers": {
       "columns": ["id", "employee_id", "file_name", "destination_email", "transfer_time"],
       "rows": [
-        [1, 2, "rechnung_maerz.pdf", "j.weber@partner-firma.com", "2024-03-11 10:15:00"],
-        [2, 1, "kundenliste_2024.csv", "a.mueller.backup@mailbox-extern.com", "2024-03-11 03:16:00"],
+        [1, 1, "kundenliste_2024.csv", "a.mueller.backup@mailbox-extern.com", "2024-03-11 03:16:00"],
+        [2, 2, "rechnung_maerz.pdf", "j.weber@partner-firma.com", "2024-03-11 10:15:00"],
         [3, 5, "angebot_kunde.docx", "l.fischer@partner-firma.com", "2024-03-11 11:02:00"],
         [4, 3, "bewerbung_scan.pdf", "s.wagner@hr-external.com", "2024-03-10 09:20:00"],
         [5, 1, "wochenbericht.xlsx", "a.mueller@corp.com", "2024-03-08 16:40:00"],
-        [6, 4, "projektplan.pptx", "m.schmidt@corp.com", "2024-03-11 09:30:00"]
+        [6, 4, "projektplan.pptx", "m.schmidt@corp.com", "2024-03-11 09:30:00"],
+        [7, 7, "kampagne_q1.pdf", "j.hoffmann@corp.com", "2024-03-11 13:12:00"],
+        [8, 8, "budget_2024.xlsx", "f.braun@corp.com", "2024-03-11 14:05:00"],
+        [9, 10, "backup_config.txt", "d.krueger@corp.com", "2024-03-11 10:48:00"],
+        [10, 6, "wartungsplan.docx", "t.becker@corp.com", "2024-03-11 15:20:00"],
+        [11, 11, "kundenanfrage.pdf", "s.wolf@corp.com", "2024-03-11 16:01:00"],
+        [12, 9, "onboarding.pdf", "n.schulz@corp.com", "2024-03-10 11:30:00"],
+        [13, 12, "ticket_export.csv", "m.koch@corp.com", "2024-03-11 12:44:00"]
       ]
     }
   },
@@ -57,9 +80,5 @@
     "type": "exact_match",
     "value": "Markus Schmidt"
   },
-  "hints": [
-    "Die file_transfers-Zeile zur Tatzeit (03:16 Uhr) läuft über employee_id 1 - das ist nur das gekaperte Konto, nicht der Täter. Damit lässt sich der Fall allein nicht lösen.",
-    "Schau in badge_logs nach: Wann hat Anna Müller laut Zutrittssystem das Gebäude überhaupt betreten? Passt das zur Login-Zeit 03:14 Uhr?",
-    "Filtere badge_logs nach entrance = 'Serverraum' am 11.03.2024 - wer war zur Tatzeit tatsächlich physisch dort?"
-  ]
+  "hints": ["Die file_transfers-Zeile zur Tatzeit (03:16 Uhr) läuft über employee_id 1 - das ist nur das gekaperte Konto, nicht der Täter. Damit lässt sich der Fall allein nicht lösen.", "Schau in badge_logs nach: Wann hat Anna Müller laut Zutrittssystem das Gebäude überhaupt betreten? Passt das zur Login-Zeit 03:14 Uhr?", "Filtere badge_logs nach entrance = 'Serverraum' am 11.03.2024 - wer war zur Tatzeit tatsächlich physisch dort?"]
 }

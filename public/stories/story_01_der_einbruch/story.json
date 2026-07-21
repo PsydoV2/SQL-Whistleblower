@@ -12,7 +12,15 @@
         [3, "Sophie Wagner", "HR", "s.wagner@corp.com", "2018-11-20"],
         [4, "Markus Schmidt", "IT", "m.schmidt@corp.com", "2021-01-10"],
         [5, "Laura Fischer", "Sales", "l.fischer@corp.com", "2022-05-03"],
-        [6, "Thomas Becker", "IT", "t.becker@corp.com", "2017-09-12"]
+        [6, "Thomas Becker", "IT", "t.becker@corp.com", "2017-09-12"],
+        [7, "Julia Hoffmann", "Marketing", "j.hoffmann@corp.com", "2020-02-17"],
+        [8, "Felix Braun", "Finance", "f.braun@corp.com", "2019-06-05"],
+        [9, "Nina Schulz", "HR", "n.schulz@corp.com", "2021-09-01"],
+        [10, "David Krüger", "IT", "d.krueger@corp.com", "2018-04-23"],
+        [11, "Sarah Wolf", "Sales", "s.wolf@corp.com", "2022-01-19"],
+        [12, "Michael Koch", "Support", "m.koch@corp.com", "2020-11-11"],
+        [13, "Lena Richter", "Marketing", "l.richter@corp.com", "2023-03-06"],
+        [14, "Peter Neumann", "Support", "p.neumann@corp.com", "2017-08-30"]
       ]
     }
   }

@@ -15,6 +15,7 @@ interface TaskbarProps {
   windows: TaskbarWindowEntry[];
   onWindowButtonClick: (key: string) => void;
   onExitToMenu: () => void;
+  onPanic: () => void;
 }
 
 function useClock() {
@@ -32,6 +33,7 @@ function Taskbar({
   windows,
   onWindowButtonClick,
   onExitToMenu,
+  onPanic,
 }: TaskbarProps) {
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const now = useClock();
@@ -97,6 +99,16 @@ function Taskbar({
         </div>
 
         <div className={styles.tray}>
+          <button
+            type="button"
+            className={styles.panicButton}
+            onClick={onPanic}
+            title="Panik: Ansicht sofort verbergen (Esc)"
+            aria-label="Panik: Ansicht sofort verbergen"
+          >
+            <span aria-hidden="true">⏻</span>
+            <span className={styles.panicLabel}>Panik</span>
+          </button>
           <span className={styles.trayChapter}>{chapterLabel}</span>
           <div className={styles.clock}>
             <span className={styles.clockTime}>{time}</span>

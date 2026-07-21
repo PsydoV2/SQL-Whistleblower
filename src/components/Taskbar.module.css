@@ -146,6 +146,37 @@
   color: #ffffff;
 }
 
+.panicButton {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(180deg, #e8776a 0%, #c0392b 55%, #a52c1f 100%);
+  border: 1px solid #8f2417;
+  border-radius: 5px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.panicButton:hover {
+  background: linear-gradient(180deg, #f08a7d 0%, #d1493a 55%, #b83527 100%);
+}
+
+.panicLabel {
+  white-space: nowrap;
+}
+
+@media (max-width: 620px) {
+  .panicLabel {
+    display: none;
+  }
+}
+
 .trayChapter {
   font-size: 0.78rem;
   font-weight: 600;

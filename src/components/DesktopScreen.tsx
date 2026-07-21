@@ -197,13 +197,21 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     setRevealedHints(0);
   }, [currentChapterNumber]);
 
-  // Boss-Key: Esc verbirgt das Spiel sofort hinter der Tarn-Ansicht.
-  // Das Ausblenden übernimmt PanicOverlay selbst.
+  // Boss-Key: öffnet sofort einen echten, unauffälligen Tab (Google) im
+  // Vordergrund und überdeckt den Spiel-Tab mit einer neutralen Ansicht.
+  // window.open muss direkt aus der User-Geste kommen, sonst blockt der
+  // Popup-Blocker – daher hier im Handler, nicht in PanicOverlay.
+  function triggerPanic() {
+    window.open("https://www.google.com/", "_blank", "noopener,noreferrer");
+    setPanicActive(true);
+  }
+
+  // Esc löst die Panik aus (das Ausblenden übernimmt PanicOverlay selbst).
   useEffect(() => {
     function handleKey(event: KeyboardEvent) {
       if (event.key === "Escape" && !panicActive) {
         event.preventDefault();
-        setPanicActive(true);
+        triggerPanic();
       }
     }
     window.addEventListener("keydown", handleKey);
@@ -503,7 +511,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         }))}
         onWindowButtonClick={(key) => handleTaskbarClick(key as WindowKey)}
         onExitToMenu={onExitToMenu}
-        onPanic={() => setPanicActive(true)}
+        onPanic={triggerPanic}
       />
 
       {transition?.kind === "chapter" && (

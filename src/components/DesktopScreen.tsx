@@ -23,6 +23,7 @@ import FloatingWindow, {
   type WindowSize,
 } from "./FloatingWindow";
 import Taskbar from "./Taskbar";
+import PanicOverlay from "./PanicOverlay";
 import styles from "./DesktopScreen.module.css";
 
 interface DesktopScreenProps {
@@ -125,6 +126,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
   const [revealedHints, setRevealedHints] = useState(0);
   const [arrestError, setArrestError] = useState<string | null>(null);
   const [transition, setTransition] = useState<Transition | null>(null);
+  const [panicActive, setPanicActive] = useState(false);
 
   function makeWindow(key: WindowKey): OpenWindow {
     return {
@@ -194,6 +196,19 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
   useEffect(() => {
     setRevealedHints(0);
   }, [currentChapterNumber]);
+
+  // Boss-Key: Esc verbirgt das Spiel sofort hinter der Tarn-Ansicht.
+  // Das Ausblenden übernimmt PanicOverlay selbst.
+  useEffect(() => {
+    function handleKey(event: KeyboardEvent) {
+      if (event.key === "Escape" && !panicActive) {
+        event.preventDefault();
+        setPanicActive(true);
+      }
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [panicActive]);
 
   useEffect(() => {
     return () => {
@@ -488,6 +503,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         }))}
         onWindowButtonClick={(key) => handleTaskbarClick(key as WindowKey)}
         onExitToMenu={onExitToMenu}
+        onPanic={() => setPanicActive(true)}
       />
 
       {transition?.kind === "chapter" && (
@@ -508,6 +524,8 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
           onContinue={onExitToMenu}
         />
       )}
+
+      {panicActive && <PanicOverlay onDismiss={() => setPanicActive(false)} />}
     </div>
   );
 }

@@ -75,6 +75,60 @@
   min-width: 0;
 }
 
+.schema {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.schemaHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.schemaName {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.schemaMeta {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.typeCell {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0.3rem 0.6rem;
+}
+
+.colCell {
+  padding: 0;
+}
+
+.schemaHint {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.schemaCode {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  background: var(--accent-muted);
+  color: var(--text-bright);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 .table {
   width: 100%;
   font-family: var(--font-mono);

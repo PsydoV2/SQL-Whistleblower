@@ -17,11 +17,16 @@ const MIN_HEIGHT = 160;
 
 interface FloatingWindowProps {
   title: string;
+  glyph: string;
   position: WindowPosition;
   size: WindowSize;
   zIndex: number;
+  minimized: boolean;
+  maximized: boolean;
   onClose: () => void;
   onFocus: () => void;
+  onMinimize: () => void;
+  onToggleMaximize: () => void;
   onMove: (position: WindowPosition) => void;
   onResize: (size: WindowSize) => void;
   children: ReactNode;
@@ -29,11 +34,16 @@ interface FloatingWindowProps {
 
 function FloatingWindow({
   title,
+  glyph,
   position,
   size,
   zIndex,
+  minimized,
+  maximized,
   onClose,
   onFocus,
+  onMinimize,
+  onToggleMaximize,
   onMove,
   onResize,
   children,
@@ -53,7 +63,7 @@ function FloatingWindow({
   } | null>(null);
 
   function handleTitleBarPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || maximized) return;
     onFocus();
     event.currentTarget.setPointerCapture(event.pointerId);
     dragStartRef.current = {
@@ -108,16 +118,28 @@ function FloatingWindow({
     }
   }
 
-  return (
-    <div
-      className={styles.window}
-      style={{
+  const positionStyle = maximized
+    ? {
+        left: 0,
+        top: 0,
+        width: "100%",
+        height: "100%",
+        zIndex,
+        display: minimized ? "none" : undefined,
+      }
+    : {
         left: position.x,
         top: position.y,
         width: size.width,
         height: size.height,
         zIndex,
-      }}
+        display: minimized ? "none" : undefined,
+      };
+
+  return (
+    <div
+      className={`${styles.window} ${maximized ? styles.windowMaximized : ""}`}
+      style={positionStyle}
       onPointerDownCapture={onFocus}
     >
       <div
@@ -126,26 +148,50 @@ function FloatingWindow({
         onPointerMove={handleTitleBarPointerMove}
         onPointerUp={handleTitleBarPointerUp}
         onPointerCancel={handleTitleBarPointerUp}
+        onDoubleClick={onToggleMaximize}
       >
+        <span className={styles.titleGlyph} aria-hidden="true">
+          {glyph}
+        </span>
         <span className={styles.title}>{title}</span>
-        <button
-          className={styles.closeButton}
-          onClick={onClose}
-          onPointerDown={(event) => event.stopPropagation()}
-          aria-label="Fenster schließen"
-        >
-          ×
-        </button>
+        <div className={styles.windowControls}>
+          <button
+            className={styles.controlButton}
+            onClick={onMinimize}
+            onPointerDown={(event) => event.stopPropagation()}
+            aria-label="Fenster minimieren"
+          >
+            <span className={styles.minGlyph} />
+          </button>
+          <button
+            className={styles.controlButton}
+            onClick={onToggleMaximize}
+            onPointerDown={(event) => event.stopPropagation()}
+            aria-label={maximized ? "Fenster wiederherstellen" : "Fenster maximieren"}
+          >
+            <span className={maximized ? styles.restoreGlyph : styles.maxGlyph} />
+          </button>
+          <button
+            className={styles.closeButton}
+            onClick={onClose}
+            onPointerDown={(event) => event.stopPropagation()}
+            aria-label="Fenster schließen"
+          >
+            ×
+          </button>
+        </div>
       </div>
       <div className={styles.body}>{children}</div>
-      <div
-        className={styles.resizeHandle}
-        onPointerDown={handleResizePointerDown}
-        onPointerMove={handleResizePointerMove}
-        onPointerUp={handleResizePointerUp}
-        onPointerCancel={handleResizePointerUp}
-        aria-hidden="true"
-      />
+      {!maximized && (
+        <div
+          className={styles.resizeHandle}
+          onPointerDown={handleResizePointerDown}
+          onPointerMove={handleResizePointerMove}
+          onPointerUp={handleResizePointerUp}
+          onPointerCancel={handleResizePointerUp}
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
 }

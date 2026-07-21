@@ -46,12 +46,34 @@
   margin-bottom: 0.5rem;
 }
 
+.hintsIntro {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  color: #6b5a1f;
+  font-style: italic;
+}
+
 .hintsList {
-  margin: 0;
+  margin: 0 0 0.6rem;
   padding-left: 1.1rem;
   font-size: 0.85rem;
   color: #6b5a1f;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
+
+.hintButton {
+  background: linear-gradient(180deg, #fdf1b8 0%, #f2df84 100%);
+  border: 1px solid #d8c25e;
+  border-radius: 5px;
+  color: #6b5a1f;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+}
+
+.hintButton:hover {
+  background: linear-gradient(180deg, #fef6c9 0%, #f6e79a 100%);
 }

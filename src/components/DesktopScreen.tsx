@@ -14,7 +14,7 @@ import {
 import MailClient from "./MailClient";
 import EvidenceFolder from "./EvidenceFolder";
 import TableViewer from "./TableViewer";
-import SqlConsole from "./SqlConsole";
+import SqlConsole, { type SqlRunInfo } from "./SqlConsole";
 import ResultsPane from "./ResultsPane";
 import ArrestTool from "./ArrestTool";
 import ChapterTransition from "./ChapterTransition";
@@ -31,13 +31,7 @@ interface DesktopScreenProps {
   onExitToMenu: () => void;
 }
 
-type WindowKey =
-  | "mail"
-  | "evidence"
-  | "tables"
-  | "sql"
-  | "results"
-  | "arrest";
+type WindowKey = "mail" | "evidence" | "tables" | "sql" | "results" | "arrest";
 
 interface WindowConfig {
   label: string;
@@ -59,8 +53,8 @@ const WINDOW_CONFIG: Record<WindowKey, WindowConfig> = {
   sql: {
     label: "SQL-Konsole",
     glyph: "🖥️",
-    width: 340,
-    height: 340,
+    width: 440,
+    height: 360,
     position: { x: 1000, y: 20 },
   },
   tables: {
@@ -82,7 +76,7 @@ const WINDOW_CONFIG: Record<WindowKey, WindowConfig> = {
     glyph: "🚨",
     width: 340,
     height: 220,
-    position: { x: 1000, y: 380 },
+    position: { x: 1000, y: 400 },
   },
 };
 
@@ -99,11 +93,15 @@ interface OpenWindow {
   position: WindowPosition;
   size: WindowSize;
   zIndex: number;
+  minimized: boolean;
+  maximized: boolean;
 }
 
 type Transition =
   | { kind: "chapter"; nextChapter: number }
   | { kind: "completed" };
+
+const HISTORY_LIMIT = 20;
 
 function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps) {
   const [loadedStory, setLoadedStory] = useState<LoadedStory | null>(null);
@@ -119,8 +117,25 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
 
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null);
   const [queryError, setQueryError] = useState<string | null>(null);
+  const [sqlText, setSqlText] = useState("SELECT * FROM employees;");
+  const [sqlHistory, setSqlHistory] = useState<string[]>([]);
+  const [sqlLastRun, setSqlLastRun] = useState<SqlRunInfo | null>(null);
+  const sqlInsertRef = useRef<((token: string) => void) | null>(null);
+
+  const [revealedHints, setRevealedHints] = useState(0);
   const [arrestError, setArrestError] = useState<string | null>(null);
   const [transition, setTransition] = useState<Transition | null>(null);
+
+  function makeWindow(key: WindowKey): OpenWindow {
+    return {
+      key,
+      position: WINDOW_CONFIG[key].position,
+      size: { width: WINDOW_CONFIG[key].width, height: WINDOW_CONFIG[key].height },
+      zIndex: nextZIndexRef.current++,
+      minimized: false,
+      maximized: false,
+    };
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -132,14 +147,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         const startChapter = progress?.currentChapter ?? 1;
         setCurrentChapterNumber(startChapter);
         setChapterProgress(storyId, startChapter);
-        setOpenWindows([
-          {
-            key: "mail",
-            position: WINDOW_CONFIG.mail.position,
-            size: { width: WINDOW_CONFIG.mail.width, height: WINDOW_CONFIG.mail.height },
-            zIndex: nextZIndexRef.current++,
-          },
-        ]);
+        setOpenWindows([makeWindow("mail")]);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -171,6 +179,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         });
         setQueryResults(null);
         setQueryError(null);
+        setSqlLastRun(null);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -181,6 +190,10 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
       cancelled = true;
     };
   }, [loadedStory, currentChapterNumber]);
+
+  useEffect(() => {
+    setRevealedHints(0);
+  }, [currentChapterNumber]);
 
   useEffect(() => {
     return () => {
@@ -201,25 +214,22 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     (chapter) => chapter.chapterNumber === currentChapterNumber,
   );
 
+  const visibleWindows = openWindows.filter((win) => !win.minimized);
+  const topZIndex = visibleWindows.reduce(
+    (max, win) => Math.max(max, win.zIndex),
+    -Infinity,
+  );
+
   function openWindow(key: WindowKey) {
     setOpenWindows((prev) => {
       if (prev.some((win) => win.key === key)) {
         return prev.map((win) =>
-          win.key === key ? { ...win, zIndex: nextZIndexRef.current++ } : win,
+          win.key === key
+            ? { ...win, minimized: false, zIndex: nextZIndexRef.current++ }
+            : win,
         );
       }
-      return [
-        ...prev,
-        {
-          key,
-          position: WINDOW_CONFIG[key].position,
-          size: {
-            width: WINDOW_CONFIG[key].width,
-            height: WINDOW_CONFIG[key].height,
-          },
-          zIndex: nextZIndexRef.current++,
-        },
-      ];
+      return [...prev, makeWindow(key)];
     });
   }
 
@@ -233,6 +243,34 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
         win.key === key ? { ...win, zIndex: nextZIndexRef.current++ } : win,
       ),
     );
+  }
+
+  function minimizeWindow(key: WindowKey) {
+    setOpenWindows((prev) =>
+      prev.map((win) => (win.key === key ? { ...win, minimized: true } : win)),
+    );
+  }
+
+  function toggleMaximizeWindow(key: WindowKey) {
+    setOpenWindows((prev) =>
+      prev.map((win) =>
+        win.key === key
+          ? { ...win, maximized: !win.maximized, zIndex: nextZIndexRef.current++ }
+          : win,
+      ),
+    );
+  }
+
+  function handleTaskbarClick(key: WindowKey) {
+    const win = openWindows.find((w) => w.key === key);
+    if (!win) return;
+    if (win.minimized) {
+      openWindow(key);
+    } else if (win.zIndex === topZIndex) {
+      minimizeWindow(key);
+    } else {
+      focusWindow(key);
+    }
   }
 
   function moveWindow(key: WindowKey, position: WindowPosition) {
@@ -254,20 +292,61 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     );
   }
 
-  function handleRunQuery(sqlText: string) {
+  function insertIntoSql(token: string) {
+    const sqlWin = openWindows.find((win) => win.key === "sql");
+    if (sqlWin && !sqlWin.minimized && sqlInsertRef.current) {
+      sqlInsertRef.current(token);
+    } else {
+      setSqlText((prev) => {
+        const needsSpace = prev.length > 0 && !/\s$/.test(prev);
+        return prev + (needsSpace ? " " : "") + token;
+      });
+      openWindow("sql");
+    }
+  }
+
+  function handleRunQuery(sql: string) {
+    const time = new Date().toLocaleTimeString("de-DE");
     if (!db) {
+      setQueryResults(null);
       setQueryError("Datenbank wird noch geladen, bitte kurz warten.");
+      setSqlLastRun({ time, summary: "Datenbank lädt noch", ok: false });
+      openWindow("results");
       return;
     }
+    const start = performance.now();
     try {
-      const result = runQuery(db, sqlText);
+      const result = runQuery(db, sql);
+      const duration = Math.max(1, Math.round(performance.now() - start));
+      const rowCount = result.reduce((sum, r) => sum + r.rows.length, 0);
       setQueryResults(result);
       setQueryError(null);
+      setSqlLastRun({
+        time,
+        summary: `${rowCount} Zeile(n) · ${duration} ms`,
+        ok: true,
+      });
     } catch (err) {
       setQueryResults(null);
       setQueryError(err instanceof Error ? err.message : String(err));
+      setSqlLastRun({ time, summary: "Fehler in der Abfrage", ok: false });
     }
+    setSqlHistory((prev) => {
+      const trimmed = sql.trim();
+      if (prev[0] === trimmed) return prev;
+      return [trimmed, ...prev.filter((q) => q !== trimmed)].slice(
+        0,
+        HISTORY_LIMIT,
+      );
+    });
     openWindow("results");
+  }
+
+  function handleRevealHint() {
+    if (!currentChapter) return;
+    setRevealedHints((count) =>
+      Math.min(count + 1, currentChapter.hints.length),
+    );
   }
 
   function handleArrestSubmit(name: string) {
@@ -283,8 +362,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     }
 
     setArrestError(null);
-    const isLastChapter =
-      currentChapterNumber >= loadedStory.chapters.length;
+    const isLastChapter = currentChapterNumber >= loadedStory.chapters.length;
 
     if (isLastChapter) {
       markStoryCompleted(storyId);
@@ -298,14 +376,7 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     setChapterProgress(storyId, nextChapter);
     setCurrentChapterNumber(nextChapter);
     setArrestError(null);
-    setOpenWindows([
-      {
-        key: "mail",
-        position: WINDOW_CONFIG.mail.position,
-        size: { width: WINDOW_CONFIG.mail.width, height: WINDOW_CONFIG.mail.height },
-        zIndex: nextZIndexRef.current++,
-      },
-    ]);
+    setOpenWindows([makeWindow("mail")]);
     setTransition(null);
   }
 
@@ -319,15 +390,24 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
           <EvidenceFolder
             evidence={currentChapter.evidence}
             hints={currentChapter.hints}
+            revealedHints={revealedHints}
+            onRevealHint={handleRevealHint}
           />
         );
       case "tables":
-        return <TableViewer tables={cumulativeTables} />;
+        return <TableViewer tables={cumulativeTables} onInsert={insertIntoSql} />;
       case "sql":
         return dbError ? (
           <div className={styles.centered}>Datenbank-Fehler: {dbError}</div>
         ) : (
-          <SqlConsole onRunQuery={handleRunQuery} />
+          <SqlConsole
+            value={sqlText}
+            onChange={setSqlText}
+            onRun={handleRunQuery}
+            history={sqlHistory}
+            lastRun={sqlLastRun}
+            insertRef={sqlInsertRef}
+          />
         );
       case "results":
         return <ResultsPane results={queryResults} error={queryError} />;
@@ -358,11 +438,6 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
     );
   }
 
-  const maxZIndex = openWindows.reduce(
-    (max, win) => Math.max(max, win.zIndex),
-    -Infinity,
-  );
-
   return (
     <div className={styles.screen}>
       <div className={styles.desktop} ref={desktopRef}>
@@ -383,11 +458,16 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
           <FloatingWindow
             key={win.key}
             title={WINDOW_CONFIG[win.key].label}
+            glyph={WINDOW_CONFIG[win.key].glyph}
             position={win.position}
             size={win.size}
             zIndex={win.zIndex}
+            minimized={win.minimized}
+            maximized={win.maximized}
             onClose={() => closeWindow(win.key)}
             onFocus={() => focusWindow(win.key)}
+            onMinimize={() => minimizeWindow(win.key)}
+            onToggleMaximize={() => toggleMaximizeWindow(win.key)}
             onMove={(position) => moveWindow(win.key, position)}
             onResize={(size) => resizeWindow(win.key, size)}
           >
@@ -403,9 +483,10 @@ function DesktopScreen({ storyId, storyPath, onExitToMenu }: DesktopScreenProps)
           key: win.key,
           label: WINDOW_CONFIG[win.key].label,
           glyph: WINDOW_CONFIG[win.key].glyph,
-          isActive: win.zIndex === maxZIndex,
+          isActive: !win.minimized && win.zIndex === topZIndex,
+          isMinimized: win.minimized,
         }))}
-        onFocusWindow={(key) => focusWindow(key as WindowKey)}
+        onWindowButtonClick={(key) => handleTaskbarClick(key as WindowKey)}
         onExitToMenu={onExitToMenu}
       />
 

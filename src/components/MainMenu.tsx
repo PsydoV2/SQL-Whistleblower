@@ -4,7 +4,7 @@ import { getStoryProgress } from "../engine/progressStore";
 import styles from "./MainMenu.module.css";
 
 interface MainMenuProps {
-  onSelectStory: (storyId: string, storyPath: string) => void;
+  onSelectStory: (storyId: string, storyPath: string, storyTitle: string) => void;
 }
 
 function MainMenu({ onSelectStory }: MainMenuProps) {
@@ -23,7 +23,7 @@ function MainMenu({ onSelectStory }: MainMenuProps) {
             <button
               key={entry.id}
               className={styles.card}
-              onClick={() => onSelectStory(entry.id, entry.path)}
+              onClick={() => onSelectStory(entry.id, entry.path, entry.title)}
             >
               <div className={styles.cardHeader}>
                 <h2>{entry.title}</h2>

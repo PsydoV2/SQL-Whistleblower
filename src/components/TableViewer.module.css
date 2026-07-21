@@ -9,12 +9,27 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  min-width: 130px;
+  min-width: 160px;
   border-right: 1px solid var(--border-dim);
   padding-right: 0.75rem;
 }
 
+.listLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin-bottom: 0.15rem;
+}
+
+.tableRow {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
 .tableButton {
+  flex: 1;
   text-align: left;
   background: transparent;
   border: 1px solid transparent;
@@ -37,6 +52,23 @@
   border-color: #2f66b3;
 }
 
+.insertButton {
+  flex-shrink: 0;
+  width: 1.6rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e9f2 100%);
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.insertButton:hover {
+  border-color: var(--border-bright);
+  background: linear-gradient(180deg, #ffffff 0%, #d7e7fb 100%);
+}
+
 .tableWrapper {
   flex: 1;
   overflow: auto;
@@ -52,17 +84,36 @@
 .table th,
 .table td {
   border: 1px solid var(--border-dim);
-  padding: 0.3rem 0.6rem;
+  padding: 0;
   text-align: left;
   white-space: nowrap;
 }
 
+.table td {
+  padding: 0.3rem 0.6rem;
+}
+
 .table th {
   background: linear-gradient(180deg, #f5f8fc 0%, #e2e9f2 100%);
-  color: var(--text-bright);
-  font-weight: 600;
   position: sticky;
   top: 0;
+}
+
+.columnButton {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  color: var(--text-bright);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.columnButton:hover {
+  background: var(--accent-muted);
 }
 
 .table tr:nth-child(even) td {

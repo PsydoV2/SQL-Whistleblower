@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Taskbar.module.css";
 
 export interface TaskbarWindowEntry {
@@ -6,24 +6,45 @@ export interface TaskbarWindowEntry {
   label: string;
   glyph: string;
   isActive: boolean;
+  isMinimized: boolean;
 }
 
 interface TaskbarProps {
   storyTitle: string;
   chapterLabel: string;
   windows: TaskbarWindowEntry[];
-  onFocusWindow: (key: string) => void;
+  onWindowButtonClick: (key: string) => void;
   onExitToMenu: () => void;
+}
+
+function useClock() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(new Date()), 1000 * 15);
+    return () => window.clearInterval(id);
+  }, []);
+  return now;
 }
 
 function Taskbar({
   storyTitle,
   chapterLabel,
   windows,
-  onFocusWindow,
+  onWindowButtonClick,
   onExitToMenu,
 }: TaskbarProps) {
   const [startMenuOpen, setStartMenuOpen] = useState(false);
+  const now = useClock();
+
+  const time = now.toLocaleTimeString("de-DE", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const date = now.toLocaleDateString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 
   return (
     <>
@@ -66,8 +87,8 @@ function Taskbar({
               key={win.key}
               className={`${styles.windowButton} ${
                 win.isActive ? styles.windowButtonActive : ""
-              }`}
-              onClick={() => onFocusWindow(win.key)}
+              } ${win.isMinimized ? styles.windowButtonMinimized : ""}`}
+              onClick={() => onWindowButtonClick(win.key)}
             >
               <span>{win.glyph}</span>
               <span>{win.label}</span>
@@ -76,8 +97,11 @@ function Taskbar({
         </div>
 
         <div className={styles.tray}>
-          <span className={styles.trayStory}>{storyTitle}</span>
           <span className={styles.trayChapter}>{chapterLabel}</span>
+          <div className={styles.clock}>
+            <span className={styles.clockTime}>{time}</span>
+            <span className={styles.clockDate}>{date}</span>
+          </div>
         </div>
       </div>
     </>

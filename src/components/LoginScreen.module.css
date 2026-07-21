@@ -1,0 +1,148 @@
+.screen {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background:
+    radial-gradient(ellipse at 50% 30%, #4c84d0 0%, #2f5fa8 45%, #1b3d72 100%);
+  color: #ffffff;
+}
+
+.cancel {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+}
+
+.cancel:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.caseBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.caseLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.caseTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.4rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(210, 228, 250, 0.85));
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.userName {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+}
+
+.loginForm {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.password {
+  width: 210px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f2733;
+}
+
+.password:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+.loginButton {
+  width: 2.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.loginButton:hover {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.welcome {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  height: 2.4rem;
+}
+
+.spinner {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hint {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.footer {
+  position: absolute;
+  bottom: 1.25rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+}

@@ -126,24 +126,56 @@
   border-color: rgba(255, 255, 255, 0.9);
 }
 
+.windowButtonMinimized {
+  opacity: 0.65;
+  font-style: italic;
+}
+
+.windowButtonMinimized.windowButtonActive {
+  opacity: 1;
+  font-style: normal;
+}
+
 .tray {
   flex-shrink: 0;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 0.15rem 0.7rem;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.7rem;
   border-left: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
-  line-height: 1.25;
-}
-
-.trayStory {
-  font-size: 0.68rem;
-  opacity: 0.8;
 }
 
 .trayChapter {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.15;
+  padding: 0.2rem 0.4rem;
+  border-radius: 5px;
+}
+
+.clock:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.clockTime {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.clockDate {
+  font-size: 0.68rem;
+  opacity: 0.85;
 }

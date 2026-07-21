@@ -4,9 +4,18 @@ import styles from "./EvidenceFolder.module.css";
 interface EvidenceFolderProps {
   evidence: EvidenceItem[];
   hints: string[];
+  revealedHints: number;
+  onRevealHint: () => void;
 }
 
-function EvidenceFolder({ evidence, hints }: EvidenceFolderProps) {
+function EvidenceFolder({
+  evidence,
+  hints,
+  revealedHints,
+  onRevealHint,
+}: EvidenceFolderProps) {
+  const remaining = hints.length - revealedHints;
+
   return (
     <div className={styles.folder}>
       {evidence.map((item) => (
@@ -24,11 +33,23 @@ function EvidenceFolder({ evidence, hints }: EvidenceFolderProps) {
       {hints.length > 0 && (
         <div className={styles.hints}>
           <div className={styles.hintsTitle}>Hinweise</div>
-          <ul className={styles.hintsList}>
-            {hints.map((hint, index) => (
-              <li key={index}>{hint}</li>
-            ))}
-          </ul>
+          {revealedHints === 0 ? (
+            <p className={styles.hintsIntro}>
+              Komm erst mal selbst weiter — bei Bedarf kannst du Hinweise
+              anfordern.
+            </p>
+          ) : (
+            <ul className={styles.hintsList}>
+              {hints.slice(0, revealedHints).map((hint, index) => (
+                <li key={index}>{hint}</li>
+              ))}
+            </ul>
+          )}
+          {remaining > 0 && (
+            <button className={styles.hintButton} onClick={onRevealHint}>
+              Hinweis anfordern ({remaining} verbleibend)
+            </button>
+          )}
         </div>
       )}
     </div>

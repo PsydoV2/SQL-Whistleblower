@@ -9,18 +9,54 @@ interface ArrestToolProps {
 
 function ArrestTool({ onSubmit, errorMessage }: ArrestToolProps) {
   const [name, setName] = useState("");
+  const [pendingName, setPendingName] = useState<string | null>(null);
 
-  function handleSubmit() {
-    if (name.trim().length === 0) {
+  function handleRequest() {
+    const trimmed = name.trim();
+    if (trimmed.length === 0) {
       return;
     }
-    onSubmit(name);
+    setPendingName(trimmed);
+  }
+
+  function handleConfirm() {
+    if (pendingName) {
+      onSubmit(pendingName);
+      setPendingName(null);
+    }
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
-      handleSubmit();
+      handleRequest();
     }
+  }
+
+  if (pendingName) {
+    return (
+      <div className={styles.tool}>
+        <div className={styles.confirmBox}>
+          <p className={styles.confirmQuestion}>
+            Haftbefehl gegen <strong>{pendingName}</strong> ausstellen?
+          </p>
+          <p className={styles.confirmWarning}>
+            Eine Verhaftung ist folgenschwer. Stell sicher, dass die Beweislage
+            eindeutig ist.
+          </p>
+          <div className={styles.confirmRow}>
+            <button
+              className={styles.cancelButton}
+              onClick={() => setPendingName(null)}
+            >
+              Abbrechen
+            </button>
+            <button className={styles.submitButton} onClick={handleConfirm}>
+              Verhaftung bestätigen
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -37,7 +73,7 @@ function ArrestTool({ onSubmit, errorMessage }: ArrestToolProps) {
           onKeyDown={handleKeyDown}
           placeholder="Name eingeben..."
         />
-        <button className={styles.submitButton} onClick={handleSubmit}>
+        <button className={styles.submitButton} onClick={handleRequest}>
           Verhaften
         </button>
       </div>

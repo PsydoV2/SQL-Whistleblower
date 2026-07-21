@@ -9,6 +9,28 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+  background:
+    radial-gradient(
+      ellipse at 50% 38%,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0) 55%
+    ),
+    linear-gradient(180deg, #cfe0f4 0%, #a9c6e8 55%, #8fb0d8 100%);
+}
+
+.desktop::after {
+  content: "CORP·SECURITY";
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(31, 63, 107, 0.08);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .iconColumn {
